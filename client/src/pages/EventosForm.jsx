@@ -53,6 +53,17 @@ function EventoForm() {
             <h1 className="text-xl font-bold uppercase text-center">
               {params.id ? "Editar evento" : "Nuevo evento"}
             </h1>
+
+            <label className="block">Problema</label>
+            <textarea
+              name="problema"
+              rows="3"
+              placeholder="Write a description"
+              onChange={handleChange}
+              className="px-2 py-1 rounded-sm w-full"
+              value={values.description}
+            ></textarea>
+
             <label className="block">title</label>
             <input
               type="text"
@@ -62,16 +73,6 @@ function EventoForm() {
               onChange={handleChange}
               value={values.title}
             />
-
-            <label className="block">description</label>
-            <textarea
-              name="description"
-              rows="3"
-              placeholder="Write a description"
-              onChange={handleChange}
-              className="px-2 py-1 rounded-sm w-full"
-              value={values.description}
-            ></textarea>
 
             <button
               type="submit"
