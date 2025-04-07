@@ -9,51 +9,6 @@ import { EventoContextProvider } from "./context/EventoProvider";
 
 import Navbar from "./components/Navbar";
 
-// function App() {
-//   return (
-//     <div className="min-h-screen">
-//       <Navbar />
-//       <div className="container mx-auto py-4 px-20">
-//         <EventoContextProvider>
-//           <Routes>
-//             <Route path="/" element={<EventosPage />} />
-//             <Route path="/new" element={<NewEventoForm />} />
-//             <Route path="/edit/:id" element={<EventoForm />} />
-//             <Route path="*" element={<NotFound />} />
-//           </Routes>
-//         </EventoContextProvider>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-// function App() {
-//   return (
-//     <div className="min-h-screen bg-zinc-900">
-//       {/* Aquí aseguramos que el Navbar ocupe la pantalla */}
-//       <Navbar />
-      
-//       {/* Contenido principal que se mueve a la derecha cuando el Navbar se abre */}
-//       <div 
-//         className="transition-all duration-300 ease-in-out" 
-//         style={{ marginLeft: '0px' }} // Esto se actualizará dinámicamente
-//       >
-//         <div className="container mx-auto py-4 px-20">
-//           <EventoContextProvider>
-//             <Routes>
-//               <Route path="/" element={<EventosPage />} />
-//               <Route path="/new" element={<NewEventoForm />} />
-//               <Route path="/edit/:id" element={<EventoForm />} />
-//               <Route path="*" element={<NotFound />} />
-//             </Routes>
-//           </EventoContextProvider>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   

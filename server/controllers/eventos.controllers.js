@@ -1,4 +1,5 @@
 import { pool } from "../db.js";
+import { insertBitacoraEvento } from "./bitacoraEventos.controllers.js";
 
 export const getEventos = async (req, res) => {
   try {
@@ -33,6 +34,16 @@ export const createEvento = async (req, res) => {
       "INSERT INTO eventos (idmunicipio, iddependencia, fecha, tipo, problema, ubicacion, vecino, contacto_vecino, foto, fecha_movto, login) VALUES (?, ?, now(), 'PENDIENTE', ?, ?, ?, ?, ?, now(), ?)",
       [idmunicipio, iddependencia, problema, ubicacion, vecino, contacto_vecino, foto, login]
     );
+    const idevento = result.insertId;
+
+    await insertBitacoraEvento({
+      idevento,
+      iddependencia,
+      tipo: 'ACTIVO',
+      accion: 'CREADO',
+      login,
+    });
+
     res.json({
       idevento: result.insertId,
       idmunicipio,

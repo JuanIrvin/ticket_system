@@ -1,9 +1,24 @@
 import { pool } from "../db.js";
 
-export const getEventos = async (req, res) => {
+// -- crm.bitacora_evento definition
+
+// CREATE TABLE `bitacora_evento` (
+//   `idbitacora` int(11) NOT NULL AUTO_INCREMENT,
+//   `idevento` int(11) NOT NULL,
+//   `iddependencia` varchar(150) DEFAULT NULL,
+//   `tipo` varchar(45) DEFAULT NULL,
+//   `fecha_movto` date DEFAULT NULL,
+//   `accion` varchar(250) DEFAULT NULL,
+//   `login` varchar(45) DEFAULT NULL,
+//   PRIMARY KEY (`idbitacora`,`idevento`),
+//   KEY `fpk5_idx` (`idevento`),
+//   CONSTRAINT `fpk5` FOREIGN KEY (`idevento`) REFERENCES `eventos` (`idevento`)
+// ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+export const getBitacora_eventos = async (req, res) => {
   try {
     const [result] = await pool.query(
-      "SELECT * FROM eventos WHERE tipo = 'PENDIENTE' ORDER BY idevento ASC"
+      "SELECT * FROM bitacora_evento WHERE tipo = 'PENDIENTE' ORDER BY idbitacora ASC"
     );
     res.json(result);
   } catch (error) {
@@ -11,9 +26,9 @@ export const getEventos = async (req, res) => {
   }
 };
 
-export const getEvento = async (req, res) => {
+export const getBitacora_evento = async (req, res) => {
   try {
-    const [result] = await pool.query("SELECT * FROM eventos WHERE idevento = ?", [
+    const [result] = await pool.query("SELECT * FROM bitacora_evento WHERE idbitacora = ?", [
       req.params.id,
     ]);
 
@@ -26,25 +41,29 @@ export const getEvento = async (req, res) => {
   }
 };
 
-export const createEvento = async (req, res) => {
+export async function insertBitacoraEvento({ idevento, iddependencia, tipo, accion, login }) {
+  const [result] = await pool.query(
+    "INSERT INTO bitacora_evento (idevento, iddependencia, tipo, fecha_movto, accion, login) VALUES (?, ?, ?, NOW(), ?, ?)",
+    [idevento, iddependencia, tipo, accion, login]
+  );
+  return result.insertId;
+}
+
+
+export const createBitacora_evento = async (req, res) => {
   try {
-    const { idmunicipio, iddependencia, fecha, tipo, problema, ubicacion, vecino, contacto_vecino, foto, login } = req.body;
-    const [result] = await pool.query(
-      "INSERT INTO eventos (idmunicipio, iddependencia, fecha, tipo, problema, ubicacion, vecino, contacto_vecino, foto, fecha_movto, login) VALUES (?, ?, now(), 'PENDIENTE', ?, ?, ?, ?, ?, now(), ?)",
-      [idmunicipio, iddependencia, problema, ubicacion, vecino, contacto_vecino, foto, login]
-    );
+    const { idevento, iddependencia, tipo, accion, login } = req.body;
+    const idbitacora = await insertBitacoraEvento({ idevento, iddependencia, tipo, accion, login });
+    // const [result] = await pool.query(
+    //   "INSERT INTO bitacora_evento (idevento, iddependencia, tipo, fecha_movto, accion, login) VALUES (?, ?, ?, now(), ?, ?)",
+    //   [idevento, iddependencia, tipo, fecha_movto, accion, login]
+    // );
     res.json({
-      idevento: result.insertId,
-      idmunicipio,
+      idbitacora,
+      idevento,
       iddependencia,
-      fecha: result.fecha,
       tipo,
-      problema,
-      ubicacion,
-      vecino,
-      contacto_vecino,
-      foto,
-      fecha_movto: result.fecha_movto,
+      accion,
       login
     });
   } catch (error) {
@@ -52,9 +71,10 @@ export const createEvento = async (req, res) => {
   }
 };
 
-export const updateEvento = async (req, res) => {
+
+export const updateBitacora_evento = async (req, res) => {
   try {
-    const result = await pool.query("UPDATE eventos SET ?, fecha = now() WHERE idevento = ?", [
+    const result = await pool.query("UPDATE bitacora_evento SET ? WHERE idbitacora = ?", [
       req.body,
       req.params.id,
     ]);
@@ -64,9 +84,9 @@ export const updateEvento = async (req, res) => {
   }
 };
 
-export const deleteEvento = async (req, res) => {
+export const deleteBitacora_evento = async (req, res) => {
   try {
-    const [result] = await pool.query("DELETE FROM eventos WHERE idevento = ?", [
+    const [result] = await pool.query("DELETE FROM bitacora_evento WHERE idbitacora = ?", [
       req.params.id,
     ]);
 
